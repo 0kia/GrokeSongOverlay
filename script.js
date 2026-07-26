@@ -53,5 +53,5 @@ if (!token) {
   }
 
   updateSong();
-  setInterval(updateSong, 10000); // refresh every 10s
+  setInterval(updateSong, 15000); // refresh every 10s
 }
