@@ -5,13 +5,19 @@ html, body {
 }
 
 #song {
-  color: rgb(255, 255, 255);
+  color: white;
   font-family: sans-serif;
   padding: 10px 14px;
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+
+#song.is-visible {
+  opacity: 1;
 }
 
 #artist {
-  font-size: 2.25rem;
+  font-size: 0.85rem;
   font-weight: 500;
   color: #aeb4bc;
   text-transform: uppercase;
@@ -20,6 +26,6 @@ html, body {
 
 #track {
   margin-top: 2px;
-  font-size: 2.7rem;
+  font-size: 1.3rem;
   font-weight: 700;
 }
