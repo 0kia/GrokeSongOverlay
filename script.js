@@ -30,15 +30,28 @@ function showThenFade() {
 }
 
 if (!token) {
-  trackEl.textContent = 'Add ?yourtoken to the URL.';
+  trackEl.textContent = "URL must be of the form '...GrokeSongOverlay/?token'";
+  songEl.classList.add('is-visible');
 } else {
+  // CORS proxy 
   const url = 'https://song-proxy.okiabetter10.workers.dev/?' + token;
 
   let currentRaw = null;
 
+  const USAGE_HINT = "URL must be of the form '...GrokeSongOverlay/?token'";
+
   async function updateSong() {
     try {
       const res = await fetch(url);
+
+      if (!res.ok) {
+        trackEl.textContent = USAGE_HINT;
+        artistEl.textContent = '';
+        songEl.classList.add('is-visible');
+        clearTimeout(hideTimer);
+        return;
+      }
+
       const raw = (await res.text()).trim();
 
       if (raw !== currentRaw) {
@@ -47,10 +60,14 @@ if (!token) {
         showThenFade();
       }
     } catch (e) {
+      trackEl.textContent = USAGE_HINT;
+      artistEl.textContent = '';
+      songEl.classList.add('is-visible');
+      clearTimeout(hideTimer);
       console.error(e);
     }
   }
 
   updateSong();
-  setInterval(updateSong, 15000); // refresh every 10s
+  setInterval(updateSong, 15000); // refresh interval
 }
