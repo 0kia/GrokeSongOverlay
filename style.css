@@ -11,7 +11,7 @@ html, body {
 }
 
 #artist {
-  font-size: 0.85rem;
+  font-size: 2.25rem;
   font-weight: 500;
   color: #aeb4bc;
   text-transform: uppercase;
@@ -20,6 +20,6 @@ html, body {
 
 #track {
   margin-top: 2px;
-  font-size: 1.3rem;
+  font-size: 2.7rem;
   font-weight: 700;
 }
