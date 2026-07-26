@@ -19,19 +19,18 @@ function renderSong(raw) {
 if (!token) {
   trackEl.textContent = 'Add ?yourtoken to the URL.';
 } else {
-  const url = 'https://groke.se/twitch/spotify/?' + token;
+  // must run through cloudfare worker because of CORS
+  const url = 'https://song-proxy.okiabetter10.workers.dev/?' + token;
 
   async function updateSong() {
     try {
       const res = await fetch(url);
       renderSong(await res.text());
     } catch (e) {
-      artistEl.textContent = '';
-      trackEl.textContent = '';
       console.error(e);
     }
   }
 
   updateSong();
-  setInterval(updateSong, 10000); // refresh every 15s
+  setInterval(updateSong, 10000); // refresh every 10s
 }
