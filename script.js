@@ -1,4 +1,4 @@
-const token = extractToken(window.location.search.slice(1)); // everything after "?"
+const token = window.location.search.slice(1); // everything after "?"
 const songEl = document.getElementById('song');
 const artistEl = document.getElementById('artist');
 const trackEl = document.getElementById('track');
@@ -9,19 +9,6 @@ const VISIBLE_DURATION = 8000; // how long to stay visible before fading out
 const SONG_PATTERN = /^(?:▶️\s*)?(.+?)\s*-\s*"(.+)"\s*->/;
 
 let hideTimer = null;
-
-// trim the URL if full link and prevent double '??'. basic error checking.
-function extractToken(input) {
-  let raw = (input || '').trim();
-  if (!raw) return '';
-
-  const qIndex = raw.lastIndexOf('?');
-  if (qIndex !== -1) {
-    raw = raw.slice(qIndex + 1);
-  }
-
-  return raw.replace(/^\?+/, '');
-}
 
 function renderSong(raw) {
   const match = raw.trim().match(SONG_PATTERN);
@@ -45,7 +32,6 @@ function showThenFade() {
 if (!token) {
   trackEl.textContent = 'Add ?yourtoken to the URL.';
 } else {
-  // my proxy URL. to add CORS to response
   const url = 'https://song-proxy.okiabetter10.workers.dev/?' + token;
 
   let currentRaw = null;
@@ -66,5 +52,5 @@ if (!token) {
   }
 
   updateSong();
-  setInterval(updateSong, 15000); // refresh interval
+  setInterval(updateSong, 15000); // refresh every 10s
 }
