@@ -32,7 +32,6 @@ function showThenFade() {
 if (!token) {
   trackEl.textContent = 'Add ?yourtoken to the URL.';
 } else {
-  // Replace with your deployed Cloudflare Worker URL
   const url = 'https://song-proxy.okiabetter10.workers.dev/?' + token;
 
   let currentRaw = null;
