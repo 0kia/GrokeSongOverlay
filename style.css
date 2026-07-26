@@ -1,0 +1,26 @@
+html, body {
+  margin: 0;
+  background: transparent;
+  overflow: hidden;
+}
+
+#song {
+  background-color: black;
+  color: rgb(255, 255, 255);
+  font-family: sans-serif;
+  padding: 10px 14px;
+}
+
+#artist {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #aeb4bc;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+#track {
+  margin-top: 2px;
+  font-size: 1.3rem;
+  font-weight: 700;
+}
