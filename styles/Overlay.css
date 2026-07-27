@@ -58,8 +58,6 @@ html, body {
   font-weight: 700;
 }
 
-/* Scrolling text */
-
 #artist.scrolling,
 #track.scrolling {
   overflow: visible;
