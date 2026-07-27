@@ -2,6 +2,7 @@ const params = new URLSearchParams(window.location.search);
 const refreshToken = params.get('refresh_token');
 const CLIENT_ID = params.get('client_id');
 const showAlbumArt = params.get('album_art') !== 'false';
+const enableFade = params.get('fade') !== 'false';
 
 const POLL_INTERVAL = 10000;
 const VISIBLE_DURATION = 7000;
@@ -25,6 +26,10 @@ console.log('Show album art:', showAlbumArt);
 function showThenFade() {
   songEl.classList.add('is-visible');
   clearTimeout(hideTimer);
+
+  if (!enableFade) {
+    return;
+  }
 
   hideTimer = setTimeout(() => {
     songEl.classList.remove('is-visible');
