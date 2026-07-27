@@ -1,6 +1,7 @@
 // Must match the Client ID used in auth.js
 const CLIENT_ID = 'f485414f678f459bac8667179cfbfcd9';
-const REDIRECT_URI = window.location.origin + window.location.pathname;
+const REDIRECT_URI = 'https://0kia.github.io/OkiaOverlay/pages/callback.html';
+const OVERLAY_URL = 'https://0kia.github.io/OkiaOverlay/pages/overlay.html';
 
 const statusEl = document.getElementById('status');
 
@@ -28,9 +29,7 @@ async function exchangeCodeForToken(code) {
 
   const data = await res.json();
 
-  const overlayUrl = window.location.origin
-    + window.location.pathname.replace(/callback\.html$/, '')
-    + 'overlay.html?' + data.refresh_token;
+  const overlayUrl = OVERLAY_URL + '?' + data.refresh_token;
 
   statusEl.innerHTML = 'Paste this into your OBS browser source:<br><br>'
     + '<code id="overlay-link">' + overlayUrl + '</code><br><br>'
