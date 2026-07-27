@@ -1,19 +1,42 @@
 // Must match the Client ID used in auth.js
 const CLIENT_ID = 'f485414f678f459bac8667179cfbfcd9';
-const REDIRECT_URI = 'https://0kia.github.io/OkiaOverlay/pages/callback.html';
-const OVERLAY_URL = 'https://0kia.github.io/OkiaOverlay/pages/overlay.html';
 
-const statusEl = document.getElementById('status');
+const POLL_INTERVAL = 10000;   // how often to check Spotify
+const VISIBLE_DURATION = 5000; // how long to stay visible before fading out
 
-async function exchangeCodeForToken(code) {
-  const verifier = localStorage.getItem('pkce_verifier');
+const songEl = document.getElementById('song');
+const artistEl = document.getElementById('artist');
+const trackEl = document.getElementById('track');
+
+let hideTimer = null;
+let currentTrackId = null;
+
+const refreshToken = window.location.search.slice(1); // everything after "?"
+let accessToken = null;
+let accessTokenExpires = 0;
+
+function showThenFade() {
+  songEl.classList.add('is-visible');
+  clearTimeout(hideTimer);
+  hideTimer = setTimeout(() => {
+    songEl.classList.remove('is-visible');
+  }, VISIBLE_DURATION);
+}
+
+function showError(message) {
+  artistEl.textContent = '';
+  trackEl.textContent = message;
+  songEl.classList.add('is-visible');
+  clearTimeout(hideTimer);
+}
+
+async function refreshAccessToken() {
+  if (!refreshToken) return null;
 
   const params = new URLSearchParams({
     client_id: CLIENT_ID,
-    grant_type: 'authorization_code',
-    code,
-    redirect_uri: REDIRECT_URI,
-    code_verifier: verifier
+    grant_type: 'refresh_token',
+    refresh_token: refreshToken
   });
 
   const res = await fetch('https://accounts.spotify.com/api/token', {
@@ -22,32 +45,59 @@ async function exchangeCodeForToken(code) {
     body: params.toString()
   });
 
-  if (!res.ok) {
-    statusEl.textContent = 'Login failed — check your Client ID and redirect URI.';
+  if (!res.ok) return null;
+
+  const data = await res.json();
+  accessToken = data.access_token;
+  accessTokenExpires = Date.now() + data.expires_in * 1000;
+
+  return accessToken;
+}
+
+async function getValidToken() {
+  if (accessToken && Date.now() < accessTokenExpires - 5000) {
+    return accessToken; // still valid, with a 5s safety buffer
+  }
+
+  return refreshAccessToken();
+}
+
+async function updateSong() {
+  const token = await getValidToken();
+
+  if (!token) {
+    showError("URL must be of the form '...OkiaOverlay/overlay.html?token'");
     return;
   }
 
-  const data = await res.json();
+  try {
+    const res = await fetch('https://api.spotify.com/v1/me/player/currently-playing', {
+      headers: { Authorization: 'Bearer ' + token }
+    });
 
-  const overlayUrl = OVERLAY_URL + '?' + data.refresh_token;
+    if (res.status === 204) {
+      // Nothing currently playing — leave the overlay as-is (it'll fade out on its own)
+      return;
+    }
 
-  statusEl.innerHTML = 'Paste this into your OBS browser source (DO NOT LEAK):<br><br>'
-    + '<code id="overlay-link">' + '*'.repeat(40) + '</code><br><br>'
-    + '<button id="copy-link">Copy link</button>';
+    if (!res.ok) {
+      showError('Spotify request failed (' + res.status + ').');
+      return;
+    }
 
-  document.getElementById('copy-link').addEventListener('click', () => {
-    navigator.clipboard.writeText(overlayUrl);
-  });
+    const data = await res.json();
+    if (!data || !data.item) return;
 
-  // Clean the code out of the URL bar now that we're done with it
-  window.history.replaceState({}, document.title, REDIRECT_URI);
+    if (data.item.id !== currentTrackId) {
+      currentTrackId = data.item.id;
+      artistEl.textContent = data.item.artists.map(a => a.name).join(', ');
+      trackEl.textContent = data.item.name;
+      showThenFade();
+    }
+  } catch (e) {
+    console.error(e);
+  }
 }
 
-const params = new URLSearchParams(window.location.search);
-const code = params.get('code');
-
-if (code) {
-  exchangeCodeForToken(code);
-} else {
-  statusEl.textContent = 'No login code found — go back and click "Login with Spotify" again.';
-}
+updateSong();
+setInterval(updateSong, POLL_INTERVAL);
