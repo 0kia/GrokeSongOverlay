@@ -8,6 +8,33 @@
   <body>
     <h1>okia's Overlay</h1>
     <div class="center">
+      <div class="setup-info">
+        <h2>Setup Required</h2>
+      
+        <p>
+          Spotify now requires apps using certain API features to be associated
+          with an approved organisation with more than <strong>250,000 monthly
+          active users</strong>. Because I do not meet this
+          requirement, you'll need to create your own Spotify Developer app.
+        </p>
+      
+        <p>It's quick and easy:</p>
+      
+        <ol>
+          <li>Go to <strong>developer.spotify.com</strong> and log in.</li>
+          <li>Create a new app.</li>
+          <li>
+            Name it whatever you'd like. The <strong>Redirect URI</strong> must be:
+            <code>https://0kia.github.io/OkiaOverlay/pages/callback.html</code>
+          </li>
+          <li>
+            Go to <strong>User Management</strong> and add the email address of
+            the Spotify account you'll be logging in with. The name doesn't matter.
+          </li>
+          <li>Copy the app's <strong>Client ID</strong> and paste it below.</li>
+          <li>Click <strong>Login with Spotify</strong>.</li>
+        </ol>
+      </div>
       <label for="client-id">Spotify Client ID</label>
       <input
         type="text"
