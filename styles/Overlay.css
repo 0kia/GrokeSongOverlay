@@ -40,8 +40,9 @@ html, body {
 
 #artist,
 #track {
-  width: max-content;
+  width: 100%;
   white-space: nowrap;
+  overflow: hidden;
 }
 
 #artist {
@@ -59,9 +60,9 @@ html, body {
 }
 
 /* Scrolling text */
-
 #artist.scrolling,
 #track.scrolling {
+  overflow: hidden;
   animation: scroll-text 8s linear infinite;
 }
 
