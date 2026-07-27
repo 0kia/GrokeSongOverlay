@@ -1,5 +1,5 @@
 // Must match the Client ID used in auth.js
-const CLIENT_ID = 'f485414f678f459bac8667179cfbfcd9';
+const CLIENT_ID = '4d6e9ac0717940a6ba59970c3abf8077';
 const REDIRECT_URI = 'https://0kia.github.io/OkiaOverlay/pages/callback.html';
 const OVERLAY_URL = 'https://0kia.github.io/OkiaOverlay/pages/overlay.html';
 
