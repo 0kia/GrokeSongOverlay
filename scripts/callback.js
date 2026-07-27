@@ -32,7 +32,7 @@ async function exchangeCodeForToken(code) {
   const overlayUrl = OVERLAY_URL + '?' + data.refresh_token;
 
   statusEl.innerHTML = 'Paste this into your OBS browser source:<br><br>'
-    + '<code id="overlay-link">' + overlayUrl + '</code><br><br>'
+    + '<code id="overlay-link">' + '*'.repeat(40) + '</code><br><br>'
     + '<button id="copy-link">Copy link</button>';
 
   document.getElementById('copy-link').addEventListener('click', () => {
