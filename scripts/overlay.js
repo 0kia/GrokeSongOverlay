@@ -12,7 +12,6 @@ const trackEl = document.getElementById('track');
 let hideTimer = null;
 let currentTrackId = null;
 
-const refreshToken = window.location.search.slice(1); // everything after "?"
 let accessToken = null;
 let accessTokenExpires = 0;
 
