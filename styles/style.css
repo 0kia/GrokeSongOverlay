@@ -23,6 +23,31 @@ h1 {
   gap: 14px;
 }
 
+.center label {
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+#client-id {
+  width: 350px;
+  padding: 12px 16px;
+  font-size: 1rem;
+  color: white;
+  background: #1e1e1e;
+  border: 2px solid #333;
+  border-radius: 8px;
+  outline: none;
+  box-sizing: border-box;
+}
+
+#client-id:focus {
+  border-color: #1DB954;
+}
+
+#client-id::placeholder {
+  color: #777;
+}
+
 #login-button {
   padding: 14px 28px;
   font-size: 1.1rem;
