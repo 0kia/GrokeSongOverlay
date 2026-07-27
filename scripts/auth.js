@@ -1,5 +1,5 @@
 // ---- Fill this in after creating your Spotify app ----
-const CLIENT_ID = 'f485414f678f459bac8667179cfbfcd9';
+const CLIENT_ID = 'YOUR_SPOTIFY_CLIENT_ID';
 const REDIRECT_URI = 'https://0kia.github.io/OkiaOverlay/pages/callback.html';
 const SCOPES = 'user-read-currently-playing user-read-playback-state';
 // --------------------------------------------------------
