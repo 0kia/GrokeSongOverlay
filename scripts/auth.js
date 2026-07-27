@@ -1,8 +1,8 @@
-// ---- Fill this in after creating your Spotify app ----
-const CLIENT_ID = '4d6e9ac0717940a6ba59970c3abf8077';
 const REDIRECT_URI = 'https://0kia.github.io/OkiaOverlay/pages/callback.html';
 const SCOPES = 'user-read-currently-playing user-read-playback-state';
-// --------------------------------------------------------
+
+const clientIdInput = document.getElementById('client-id');
+const loginButton = document.getElementById('login-button');
 
 const loginButton = document.getElementById('login-button');
 
@@ -25,14 +25,24 @@ async function sha256(plain) {
 }
 
 async function redirectToSpotify() {
+  const clientId = clientIdInput.value.trim();
+
+  if (!clientId) {
+    document.getElementById('status').textContent =
+      'Please enter your Spotify Client ID.';
+    return;
+  }
+
+  // Remember the Client ID for the callback and overlay
+  localStorage.setItem('spotify_client_id', clientId);
+
   const verifier = generateRandomString(64);
   const challenge = base64UrlEncode(await sha256(verifier));
 
-  // callback.html needs this again to complete the token exchange
   localStorage.setItem('pkce_verifier', verifier);
 
   const params = new URLSearchParams({
-    client_id: CLIENT_ID,
+    client_id: clientId,
     response_type: 'code',
     redirect_uri: REDIRECT_URI,
     scope: SCOPES,
@@ -40,7 +50,8 @@ async function redirectToSpotify() {
     code_challenge: challenge
   });
 
-  window.location.href = 'https://accounts.spotify.com/authorize?' + params.toString();
+  window.location.href =
+    'https://accounts.spotify.com/authorize?' + params.toString();
 }
 
 loginButton.addEventListener('click', redirectToSpotify);
