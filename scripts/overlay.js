@@ -1,6 +1,8 @@
-const CLIENT_ID = localStorage.getItem('spotify_client_id');
+const params = new URLSearchParams(window.location.search);
+const refreshToken = params.get('refresh_token');
+const CLIENT_ID = params.get('client_id');
 
-const POLL_INTERVAL = 10000;   // how often to check Spotify
+const POLL_INTERVAL = 10000; // how often to fetch
 const VISIBLE_DURATION = 7000; // how long to stay visible before fading out
 
 const songEl = document.getElementById('song');
