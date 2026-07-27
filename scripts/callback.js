@@ -39,7 +39,13 @@ async function exchangeCodeForToken(code) {
 
   const data = await res.json();
 
-  const overlayUrl = OVERLAY_URL + '?' + data.refresh_token;
+  const overlayUrl =
+  OVERLAY_URL +
+  '?' +
+  new URLSearchParams({
+    refresh_token: data.refresh_token,
+    client_id: CLIENT_ID
+  }).toString();
 
   statusEl.innerHTML = 'Paste this into your OBS browser source (DO NOT LEAK):<br><br>'
     + '<code id="overlay-link">' + '*'.repeat(40) + '</code><br><br>'
