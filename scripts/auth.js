@@ -4,6 +4,12 @@ const SCOPES = 'user-read-currently-playing user-read-playback-state';
 const clientIdInput = document.getElementById('client-id');
 const loginButton = document.getElementById('login-button');
 
+loginButton.disabled = true;
+
+clientIdInput.addEventListener('input', () => {
+  loginButton.disabled = clientIdInput.value.trim() === '';
+});
+
 function base64UrlEncode(bytes) {
   return btoa(String.fromCharCode(...new Uint8Array(bytes)))
     .replace(/\+/g, '-')
