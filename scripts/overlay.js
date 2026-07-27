@@ -2,7 +2,7 @@
 const CLIENT_ID = '4d6e9ac0717940a6ba59970c3abf8077';
 
 const POLL_INTERVAL = 10000;   // how often to check Spotify
-const VISIBLE_DURATION = 5000; // how long to stay visible before fading out
+const VISIBLE_DURATION = 7000; // how long to stay visible before fading out
 
 const songEl = document.getElementById('song');
 const artistEl = document.getElementById('artist');
