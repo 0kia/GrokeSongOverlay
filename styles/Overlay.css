@@ -21,8 +21,8 @@ html, body {
 }
 
 #album-art {
-  width: auto;
-  aspect-ratio: 1 / 1;
+  width: 100px;
+  height: 100px;
   object-fit: cover;
   border-radius: 6px;
   flex-shrink: 0;
@@ -30,7 +30,7 @@ html, body {
 
 #song-text {
   min-width: 0;
-  max-width: 450px;
+  width: 450px;
   margin-left: 12px;
   display: flex;
   flex-direction: column;
@@ -40,14 +40,14 @@ html, body {
 
 #artist,
 #track {
+  width: max-content;
   white-space: nowrap;
-  overflow: hidden;
 }
 
 #artist {
   font-size: 2.25rem;
   font-weight: 500;
-  color: #aeb4bc;
+  color: white;
   text-transform: uppercase;
   letter-spacing: 0.04em;
 }
@@ -58,9 +58,10 @@ html, body {
   font-weight: 700;
 }
 
+/* Scrolling text */
+
 #artist.scrolling,
 #track.scrolling {
-  overflow: visible;
   animation: scroll-text 8s linear infinite;
 }
 
