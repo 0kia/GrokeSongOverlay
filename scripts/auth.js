@@ -1,7 +1,6 @@
 // ---- Fill this in after creating your Spotify app ----
 const CLIENT_ID = 'f485414f678f459bac8667179cfbfcd9';
-const REDIRECT_URI = window.location.origin
-  + window.location.pathname.replace(/index\.html$/, '') + 'callback.html';
+const REDIRECT_URI = 'https://0kia.github.io/OkiaOverlay/pages/callback.html';
 const SCOPES = 'user-read-currently-playing user-read-playback-state';
 // --------------------------------------------------------
 
@@ -40,7 +39,7 @@ async function redirectToSpotify() {
     code_challenge_method: 'S256',
     code_challenge: challenge
   });
-  console.log('Redirect URI being sent:', REDIRECT_URI);
+
   window.location.href = 'https://accounts.spotify.com/authorize?' + params.toString();
 }
 
