@@ -1,16 +1,13 @@
 const params = new URLSearchParams(window.location.search);
 const refreshToken = params.get('refresh_token');
 const CLIENT_ID = params.get('client_id');
+const showAlbumArt = params.get('album_art') !== 'false';
 
 const POLL_INTERVAL = 10000;
 const VISIBLE_DURATION = 7000;
 
-const showAlbumArt = params.get('album_art') !== 'false';
 const songEl = document.getElementById('song');
 const albumArtEl = document.getElementById('album-art');
-if (!showAlbumArt) {
-  albumArtEl.style.display = 'none';
-}
 const artistEl = document.getElementById('artist');
 const trackEl = document.getElementById('track');
 
@@ -20,9 +17,15 @@ let currentTrackId = null;
 let accessToken = null;
 let accessTokenExpires = 0;
 
+console.log('CLIENT_ID:', CLIENT_ID);
+console.log('Has refresh token:', !!refreshToken);
+console.log('Refresh token length:', refreshToken?.length);
+console.log('Show album art:', showAlbumArt);
+
 function showThenFade() {
   songEl.classList.add('is-visible');
   clearTimeout(hideTimer);
+
   hideTimer = setTimeout(() => {
     songEl.classList.remove('is-visible');
   }, VISIBLE_DURATION);
@@ -76,7 +79,10 @@ function setupScrolling(element) {
 }
 
 async function refreshAccessToken() {
-  if (!refreshToken || !CLIENT_ID) return null;
+  if (!refreshToken || !CLIENT_ID) {
+    console.log('Missing refresh token or Client ID.');
+    return null;
+  }
 
   const params = new URLSearchParams({
     client_id: CLIENT_ID,
@@ -92,12 +98,18 @@ async function refreshAccessToken() {
     body: params.toString()
   });
 
-  if (!res.ok) return null;
+  if (!res.ok) {
+    console.log('Refresh token request failed:', res.status);
+    console.log('Response:', await res.text());
+    return null;
+  }
 
   const data = await res.json();
 
   accessToken = data.access_token;
   accessTokenExpires = Date.now() + data.expires_in * 1000;
+
+  console.log('Access token refreshed successfully.');
 
   return accessToken;
 }
@@ -139,7 +151,9 @@ async function updateSong() {
 
     const data = await res.json();
 
-    if (!data || !data.item) return;
+    if (!data || !data.item) {
+      return;
+    }
 
     if (data.item.id !== currentTrackId) {
       currentTrackId = data.item.id;
@@ -150,11 +164,15 @@ async function updateSong() {
 
       trackEl.textContent = data.item.name;
 
-      const albumArt = data.item.album?.images?.[0]?.url;
+      if (showAlbumArt) {
+        const albumArt = data.item.album?.images?.[0]?.url;
 
-      if (showAlbumArt && albumArt) {
-        albumArtEl.src = albumArt;
-        albumArtEl.style.display = 'block';
+        if (albumArt) {
+          albumArtEl.src = albumArt;
+          albumArtEl.style.display = 'block';
+        } else {
+          albumArtEl.style.display = 'none';
+        }
       } else {
         albumArtEl.style.display = 'none';
       }
@@ -165,7 +183,7 @@ async function updateSong() {
       showThenFade();
     }
   } catch (e) {
-    console.error(e);
+    console.error('Spotify request error:', e);
   }
 }
 
