@@ -41,10 +41,23 @@ function resetScrolling(element) {
 function setupScrolling(element) {
   resetScrolling(element);
 
-  // Wait for the browser to finish laying out the new text.
   requestAnimationFrame(() => {
+    console.log('--- SCROLL DEBUG ---');
+    console.log('Element:', element.id);
+    console.log('Text:', element.textContent);
+    console.log('scrollWidth:', element.scrollWidth);
+    console.log('clientWidth:', element.clientWidth);
+    console.log('offsetWidth:', element.offsetWidth);
+    console.log('Parent:', element.parentElement);
+    console.log('Parent clientWidth:', element.parentElement.clientWidth);
+    console.log('Computed width:', getComputedStyle(element).width);
+    console.log('Computed overflow:', getComputedStyle(element).overflow);
+
     if (element.scrollWidth > element.clientWidth) {
       const distance = element.scrollWidth - element.clientWidth;
+
+      console.log('OVERFLOW DETECTED');
+      console.log('Scroll distance:', distance);
 
       element.style.setProperty(
         '--scroll-distance',
@@ -52,6 +65,8 @@ function setupScrolling(element) {
       );
 
       element.classList.add('scrolling');
+    } else {
+      console.log('NO OVERFLOW');
     }
   });
 }
