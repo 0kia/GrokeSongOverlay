@@ -3,8 +3,12 @@ const REDIRECT_URI = 'https://0kia.github.io/OkiaOverlay/pages/callback.html';
 const OVERLAY_URL = 'https://0kia.github.io/OkiaOverlay/pages/overlay.html';
 
 const statusEl = document.getElementById('status');
+// display album art option
 const albumArtOption = document.getElementById('album-art-option');
 const showAlbumArtCheckbox = document.getElementById('show-album-art');
+// fade out enable option
+const fadeOption = document.getElementById('fade-option');
+const enableFadeCheckbox = document.getElementById('enable-fade');
 
 const params = new URLSearchParams(window.location.search);
 const code = params.get('code');
@@ -51,15 +55,21 @@ async function exchangeCodeForToken(code) {
       new URLSearchParams({
         refresh_token: data.refresh_token,
         client_id: CLIENT_ID,
-        album_art: showAlbumArtCheckbox.checked
+        album_art: showAlbumArtCheckbox.checked,
+        fade: enableFadeCheckbox.checked
       }).toString();
   }
 
   updateOverlayUrl();
 
   albumArtOption.style.display = 'block';
+  fadeOption.style.display = 'block';
 
   showAlbumArtCheckbox.addEventListener('change', () => {
+    updateOverlayUrl();
+  });
+
+  enableFadeCheckbox.addEventListener('change', () => {
     updateOverlayUrl();
   });
 
@@ -74,7 +84,6 @@ async function exchangeCodeForToken(code) {
     navigator.clipboard.writeText(overlayUrl);
   });
 
-  // Clean the authorization code out of the URL bar
   window.history.replaceState({}, document.title, REDIRECT_URI);
 }
 
