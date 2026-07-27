@@ -1,9 +1,19 @@
 // Must match the Client ID used in auth.js
-const CLIENT_ID = '4d6e9ac0717940a6ba59970c3abf8077';
+const CLIENT_ID = localStorage.getItem('spotify_client_id');
 const REDIRECT_URI = 'https://0kia.github.io/OkiaOverlay/pages/callback.html';
 const OVERLAY_URL = 'https://0kia.github.io/OkiaOverlay/pages/overlay.html';
 
 const statusEl = document.getElementById('status');
+
+if (!CLIENT_ID) {
+  statusEl.textContent =
+    'No Spotify Client ID found — go back and enter your Client ID.';
+} else if (code) {
+  exchangeCodeForToken(code);
+} else {
+  statusEl.textContent =
+    'No login code found — go back and click "Login with Spotify" again.';
+}
 
 async function exchangeCodeForToken(code) {
   const verifier = localStorage.getItem('pkce_verifier');
@@ -49,5 +59,5 @@ const code = params.get('code');
 if (code) {
   exchangeCodeForToken(code);
 } else {
-  statusEl.textContent = 'No login code found — go back and click "Login with Spotify" again.';
+  statusEl.textContent = 'No login code found — go back to home page and get your Apps Client ID and then Login.';
 }
