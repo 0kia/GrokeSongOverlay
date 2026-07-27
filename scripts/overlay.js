@@ -5,8 +5,12 @@ const CLIENT_ID = params.get('client_id');
 const POLL_INTERVAL = 10000;
 const VISIBLE_DURATION = 7000;
 
+const showAlbumArt = params.get('album_art') !== 'false';
 const songEl = document.getElementById('song');
 const albumArtEl = document.getElementById('album-art');
+if (!showAlbumArt) {
+  albumArtEl.style.display = 'none';
+}
 const artistEl = document.getElementById('artist');
 const trackEl = document.getElementById('track');
 
@@ -148,7 +152,7 @@ async function updateSong() {
 
       const albumArt = data.item.album?.images?.[0]?.url;
 
-      if (albumArt) {
+      if (showAlbumArt && albumArt) {
         albumArtEl.src = albumArt;
         albumArtEl.style.display = 'block';
       } else {
