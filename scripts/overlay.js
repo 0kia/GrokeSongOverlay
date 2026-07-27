@@ -54,16 +54,6 @@ function setupScrolling(element) {
   resetScrolling(element);
 
   requestAnimationFrame(() => {
-    console.log('--- SCROLL DEBUG ---');
-    console.log('Element:', element.id);
-    console.log('Text:', element.textContent);
-    console.log('scrollWidth:', element.scrollWidth);
-    console.log('clientWidth:', element.clientWidth);
-    console.log('offsetWidth:', element.offsetWidth);
-    console.log('Parent:', element.parentElement);
-    console.log('Parent clientWidth:', element.parentElement.clientWidth);
-    console.log('Computed width:', getComputedStyle(element).width);
-    console.log('Computed overflow:', getComputedStyle(element).overflow);
 
     if (element.scrollWidth > element.clientWidth) {
       const distance = element.scrollWidth - element.clientWidth;
@@ -85,7 +75,6 @@ function setupScrolling(element) {
 
 async function refreshAccessToken() {
   if (!refreshToken || !CLIENT_ID) {
-    console.log('Missing refresh token or Client ID.');
     return null;
   }
 
