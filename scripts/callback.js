@@ -9,6 +9,8 @@ const showAlbumArtCheckbox = document.getElementById('show-album-art');
 const params = new URLSearchParams(window.location.search);
 const code = params.get('code');
 
+let overlayUrl = '';
+
 async function exchangeCodeForToken(code) {
   const verifier = localStorage.getItem('pkce_verifier');
 
@@ -42,14 +44,24 @@ async function exchangeCodeForToken(code) {
 
   const data = await res.json();
 
-  const overlayUrl =
-  OVERLAY_URL +
-  '?' +
-  new URLSearchParams({
-    refresh_token: data.refresh_token,
-    client_id: CLIENT_ID,
-    album_art: showAlbumArtCheckbox.checked
-  }).toString();
+  function updateOverlayUrl() {
+    overlayUrl =
+      OVERLAY_URL +
+      '?' +
+      new URLSearchParams({
+        refresh_token: data.refresh_token,
+        client_id: CLIENT_ID,
+        album_art: showAlbumArtCheckbox.checked
+      }).toString();
+  }
+
+  updateOverlayUrl();
+
+  albumArtOption.style.display = 'block';
+
+  showAlbumArtCheckbox.addEventListener('change', () => {
+    updateOverlayUrl();
+  });
 
   statusEl.innerHTML =
     'Paste this into your OBS browser source (DO NOT LEAK):<br><br>' +
