@@ -31,7 +31,7 @@ async function exchangeCodeForToken(code) {
 
   const overlayUrl = OVERLAY_URL + '?' + data.refresh_token;
 
-  statusEl.innerHTML = 'Paste this into your OBS browser source:<br><br>'
+  statusEl.innerHTML = 'Paste this into your OBS browser source (DO NOT LEAK):<br><br>'
     + '<code id="overlay-link">' + '*'.repeat(40) + '</code><br><br>'
     + '<button id="copy-link">Copy link</button>';
 
