@@ -13,4 +13,4 @@ therefore you will need spotify premium, and to set up a small developer app you
 
 > The overlay makes a fetch every 10s for the currently playing song to your developer app using your account. anyone can do this as developer apps are public, but only whitelisted users requests actually get handled.
 
-[0kia.github.io/OkiaOverlay/](0kia.github.io/OkiaOverlay/)
+[0kia.github.io/OkiaOverlay/](https://0kia.github.io/OkiaOverlay/)
