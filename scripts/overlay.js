@@ -4,11 +4,8 @@ const CLIENT_ID = params.get('client_id');
 const showAlbumArt = params.get('album_art') !== 'false';
 const enableFade = params.get('fade') !== 'false';
 
-const NORMAL_POLL_INTERVAL = 10000;
-const EMPTY_POLL_INTERVAL = 15000;
-const SLOW_POLL_INTERVAL = 30000;
+const POLL_INTERVAL = 10000;
 const VISIBLE_DURATION = 7000;
-const EMPTY_RESPONSE_LIMIT = 10;
 
 const songEl = document.getElementById('song');
 const albumArtEl = document.getElementById('album-art');
@@ -17,10 +14,14 @@ const trackEl = document.getElementById('track');
 
 let hideTimer = null;
 let currentTrackId = null;
-let consecutiveEmptyResponses = 0;
 
 let accessToken = null;
 let accessTokenExpires = 0;
+
+console.log('CLIENT_ID:', CLIENT_ID);
+console.log('Has refresh token:', !!refreshToken);
+console.log('Refresh token length:', refreshToken?.length);
+console.log('Show album art:', showAlbumArt);
 
 function showThenFade() {
   songEl.classList.add('is-visible');
@@ -33,11 +34,6 @@ function showThenFade() {
   hideTimer = setTimeout(() => {
     songEl.classList.remove('is-visible');
   }, VISIBLE_DURATION);
-}
-
-function hideSong() {
-  clearTimeout(hideTimer);
-  songEl.classList.remove('is-visible');
 }
 
 function showError(message) {
@@ -58,8 +54,12 @@ function setupScrolling(element) {
   resetScrolling(element);
 
   requestAnimationFrame(() => {
+
     if (element.scrollWidth > element.clientWidth) {
       const distance = element.scrollWidth - element.clientWidth;
+
+      console.log('OVERFLOW DETECTED');
+      console.log('Scroll distance:', distance);
 
       element.style.setProperty(
         '--scroll-distance',
@@ -67,6 +67,8 @@ function setupScrolling(element) {
       );
 
       element.classList.add('scrolling');
+    } else {
+      console.log('NO OVERFLOW');
     }
   });
 }
@@ -101,6 +103,8 @@ async function refreshAccessToken() {
   accessToken = data.access_token;
   accessTokenExpires = Date.now() + data.expires_in * 1000;
 
+  console.log('Access token refreshed successfully.');
+
   return accessToken;
 }
 
@@ -110,18 +114,6 @@ async function getValidToken() {
   }
 
   return refreshAccessToken();
-}
-
-function getNextPollInterval() {
-  if (consecutiveEmptyResponses >= EMPTY_RESPONSE_LIMIT) {
-    return SLOW_POLL_INTERVAL;
-  }
-
-  if (consecutiveEmptyResponses > 0) {
-    return EMPTY_POLL_INTERVAL;
-  }
-
-  return NORMAL_POLL_INTERVAL;
 }
 
 async function updateSong() {
@@ -141,19 +133,8 @@ async function updateSong() {
         }
       }
     );
-    
+
     if (res.status === 204) {
-      consecutiveEmptyResponses++;
-    
-      artistEl.textContent = '';
-      trackEl.textContent = 'No Song Playing';
-      albumArtEl.style.display = 'none';
-    
-      resetScrolling(artistEl);
-      resetScrolling(trackEl);
-    
-      showThenFade();
-    
       return;
     }
 
@@ -165,22 +146,8 @@ async function updateSong() {
     const data = await res.json();
 
     if (!data || !data.item) {
-      consecutiveEmptyResponses++;
-    
-      artistEl.textContent = '';
-      trackEl.textContent = 'No Song Playing';
-      albumArtEl.style.display = 'none';
-    
-      resetScrolling(artistEl);
-      resetScrolling(trackEl);
-    
-      showThenFade();
-    
       return;
     }
-
-    // A song is playing again, so return to normal polling.
-    consecutiveEmptyResponses = 0;
 
     if (data.item.id !== currentTrackId) {
       currentTrackId = data.item.id;
@@ -206,20 +173,13 @@ async function updateSong() {
 
       setupScrolling(artistEl);
       setupScrolling(trackEl);
-    }
 
-    showThenFade();
+      showThenFade();
+    }
   } catch (e) {
     console.error('Spotify request error:', e);
   }
 }
 
-async function poll() {
-  await updateSong();
-
-  const nextInterval = getNextPollInterval();
-
-  setTimeout(poll, nextInterval);
-}
-
-poll();
+updateSong();
+setInterval(updateSong, POLL_INTERVAL);
