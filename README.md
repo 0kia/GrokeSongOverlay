@@ -7,7 +7,7 @@ Spotify Premium is required solely for setting up the developer app as free acco
 
 ## How Does It Work?
 
-Unfortunately spotify now only accepts third-party applications applying for extended Web API access to be a legally registered business organization with at least 250,000 Monthly Active Users (of which I am not).
+Unfortunately spotify now only accepts third-party applications applying for extended Web API access if they are a legally registered business organization with at least 250,000 Monthly Active Users (of which I am not).
 
 therefore you will need spotify premium, and to set up a small developer app yourself to act as the intermediary for the overlay.
 
