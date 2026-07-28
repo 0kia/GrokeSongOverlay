@@ -141,12 +141,19 @@ async function updateSong() {
         }
       }
     );
-
+    
     if (res.status === 204) {
       consecutiveEmptyResponses++;
-
-      hideSong();
-
+    
+      artistEl.textContent = '';
+      trackEl.textContent = 'No Song Playing';
+      albumArtEl.style.display = 'none';
+    
+      resetScrolling(artistEl);
+      resetScrolling(trackEl);
+    
+      showThenFade();
+    
       return;
     }
 
@@ -159,9 +166,16 @@ async function updateSong() {
 
     if (!data || !data.item) {
       consecutiveEmptyResponses++;
-
-      hideSong();
-
+    
+      artistEl.textContent = '';
+      trackEl.textContent = 'No Song Playing';
+      albumArtEl.style.display = 'none';
+    
+      resetScrolling(artistEl);
+      resetScrolling(trackEl);
+    
+      showThenFade();
+    
       return;
     }
 
