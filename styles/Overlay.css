@@ -42,7 +42,6 @@ html, body {
 #track {
   width: 100%;
   white-space: nowrap;
-  overflow: hidden;
 }
 
 #artist {
