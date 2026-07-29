@@ -3,6 +3,7 @@ const refreshToken = params.get('refresh_token');
 const CLIENT_ID = params.get('client_id');
 const showAlbumArt = params.get('album_art') !== 'false';
 const enableFade = params.get('fade') !== 'false';
+const bgColor = params.get('bg_color'); // e.g. ?bg_color=%23121212 or ?bg_color=rgba(0,0,0,0.5)
 
 const POLL_INTERVAL = 10000;
 const VISIBLE_DURATION = 7000;
@@ -11,6 +12,10 @@ const songEl = document.getElementById('song');
 const albumArtEl = document.getElementById('album-art');
 const artistEl = document.getElementById('artist');
 const trackEl = document.getElementById('track');
+
+if (bgColor) {
+  songEl.style.backgroundColor = bgColor;
+}
 
 let hideTimer = null;
 let currentTrackId = null;
@@ -45,9 +50,18 @@ function showError(message) {
   clearTimeout(hideTimer);
 }
 
+// Pixels per second the text should travel at, regardless of how long
+// the string is. Keeping speed constant (instead of duration constant)
+// means a long artist list gets proportionally more time to scroll by
+// instead of being crammed into the same fixed window as a short one.
+const SCROLL_SPEED_PX_PER_SEC = 60;
+const SCROLL_MIN_DURATION = 8; // seconds, floor for short overflow text
+const SCROLL_PAUSE_FRACTION = 0.4; // fraction of the cycle spent paused (start+end holds)
+
 function resetScrolling(element) {
   element.classList.remove('scrolling');
   element.style.removeProperty('--scroll-distance');
+  element.style.removeProperty('animation-duration');
 }
 
 function setupScrolling(element) {
@@ -58,13 +72,20 @@ function setupScrolling(element) {
     if (element.scrollWidth > element.clientWidth) {
       const distance = element.scrollWidth - element.clientWidth;
 
+      const travelTime = distance / SCROLL_SPEED_PX_PER_SEC;
+      const duration = Math.max(
+        SCROLL_MIN_DURATION,
+        travelTime / (1 - SCROLL_PAUSE_FRACTION)
+      );
+
       console.log('OVERFLOW DETECTED');
-      console.log('Scroll distance:', distance);
+      console.log('Scroll distance:', distance, 'duration:', duration);
 
       element.style.setProperty(
         '--scroll-distance',
         `-${distance}px`
       );
+      element.style.setProperty('animation-duration', `${duration}s`);
 
       element.classList.add('scrolling');
     } else {

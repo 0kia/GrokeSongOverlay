@@ -12,6 +12,8 @@ html, body {
   color: white;
   font-family: sans-serif;
   padding: 10px 14px;
+  border-radius: 10px;
+  background-color: transparent; /* overridden inline via ?bg_color= */
   opacity: 0;
   transition: opacity 0.6s ease;
 }
@@ -58,10 +60,13 @@ html, body {
   font-weight: 700;
 }
 
-/* Scrolling text */
 #artist.scrolling,
 #track.scrolling {
-  animation: scroll-text 8s linear infinite;
+  overflow: hidden;
+  animation-name: scroll-text;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  animation-duration: 8s;
 }
 
 @keyframes scroll-text {

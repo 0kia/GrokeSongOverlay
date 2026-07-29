@@ -9,6 +9,10 @@ const showAlbumArtCheckbox = document.getElementById('show-album-art');
 // fade out enable option
 const fadeOption = document.getElementById('fade-option');
 const enableFadeCheckbox = document.getElementById('enable-fade');
+// background color option
+const bgColorOption = document.getElementById('bg-color-option');
+const enableBgColorCheckbox = document.getElementById('enable-bg-color');
+const bgColorPicker = document.getElementById('bg-color-picker');
 
 const params = new URLSearchParams(window.location.search);
 const code = params.get('code');
@@ -49,27 +53,40 @@ async function exchangeCodeForToken(code) {
   const data = await res.json();
 
   function updateOverlayUrl() {
-    overlayUrl =
-      OVERLAY_URL +
-      '?' +
-      new URLSearchParams({
-        refresh_token: data.refresh_token,
-        client_id: CLIENT_ID,
-        album_art: showAlbumArtCheckbox.checked,
-        fade: enableFadeCheckbox.checked
-      }).toString();
+    const urlParams = {
+      refresh_token: data.refresh_token,
+      client_id: CLIENT_ID,
+      album_art: showAlbumArtCheckbox.checked,
+      fade: enableFadeCheckbox.checked
+    };
+
+    if (enableBgColorCheckbox.checked) {
+      urlParams.bg_color = bgColorPicker.value;
+    }
+
+    overlayUrl = OVERLAY_URL + '?' + new URLSearchParams(urlParams).toString();
   }
 
   updateOverlayUrl();
 
   albumArtOption.style.display = 'block';
   fadeOption.style.display = 'block';
+  bgColorOption.style.display = 'block';
 
   showAlbumArtCheckbox.addEventListener('change', () => {
     updateOverlayUrl();
   });
 
   enableFadeCheckbox.addEventListener('change', () => {
+    updateOverlayUrl();
+  });
+
+  enableBgColorCheckbox.addEventListener('change', () => {
+    bgColorPicker.disabled = !enableBgColorCheckbox.checked;
+    updateOverlayUrl();
+  });
+
+  bgColorPicker.addEventListener('input', () => {
     updateOverlayUrl();
   });
 
