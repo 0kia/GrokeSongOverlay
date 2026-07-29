@@ -4,7 +4,7 @@ const CLIENT_ID = params.get('client_id');
 const showAlbumArt = params.get('album_art') !== 'false';
 const enableFade = params.get('fade') !== 'false';
 const bgColor = params.get('bg_color');
-const customWidth = parseInt(params.get('width'), 10); 
+const customWidth = parseInt(params.get('width'), 10);
 
 const POLL_INTERVAL = 10000;
 const VISIBLE_DURATION = 7000;
@@ -21,9 +21,6 @@ if (bgColor) {
 
 if (!isNaN(customWidth) && customWidth > 0) {
   songTextEl.style.width = customWidth + 'px';
-  // The default max-width on #song is sized for the default 450px text
-  // area; a custom width can legitimately need more (or less) room, so
-  // let #song size itself to its content instead of being capped.
   songEl.style.maxWidth = 'none';
 }
 
@@ -60,14 +57,9 @@ function showError(message) {
   clearTimeout(hideTimer);
 }
 
-const SCROLL_SPEED_PX_PER_SEC = 60;
-const SCROLL_MIN_DURATION = 8; // seconds, floor for short overflow text
-const SCROLL_PAUSE_FRACTION = 0.4; // fraction of the cycle spent paused (start+end holds)
-
 function resetScrolling(element) {
   element.classList.remove('scrolling');
   element.style.removeProperty('--scroll-distance');
-  element.style.removeProperty('animation-duration');
 }
 
 function setupScrolling(element) {
@@ -78,20 +70,13 @@ function setupScrolling(element) {
     if (element.scrollWidth > element.clientWidth) {
       const distance = element.scrollWidth - element.clientWidth;
 
-      const travelTime = distance / SCROLL_SPEED_PX_PER_SEC;
-      const duration = Math.max(
-        SCROLL_MIN_DURATION,
-        travelTime / (1 - SCROLL_PAUSE_FRACTION)
-      );
-
       console.log('OVERFLOW DETECTED');
-      console.log('Scroll distance:', distance, 'duration:', duration);
+      console.log('Scroll distance:', distance);
 
       element.style.setProperty(
         '--scroll-distance',
         `-${distance}px`
       );
-      element.style.setProperty('animation-duration', `${duration}s`);
 
       element.classList.add('scrolling');
     } else {
