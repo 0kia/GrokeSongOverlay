@@ -62,7 +62,6 @@ html, body {
 
 #artist.scrolling,
 #track.scrolling {
-  overflow: hidden;
   animation-name: scroll-text;
   animation-timing-function: linear;
   animation-iteration-count: infinite;
