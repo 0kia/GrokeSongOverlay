@@ -3,18 +3,28 @@ const refreshToken = params.get('refresh_token');
 const CLIENT_ID = params.get('client_id');
 const showAlbumArt = params.get('album_art') !== 'false';
 const enableFade = params.get('fade') !== 'false';
-const bgColor = params.get('bg_color'); // e.g. ?bg_color=%23121212 or ?bg_color=rgba(0,0,0,0.5)
+const bgColor = params.get('bg_color');
+const customWidth = parseInt(params.get('width'), 10); 
 
 const POLL_INTERVAL = 10000;
 const VISIBLE_DURATION = 7000;
 
 const songEl = document.getElementById('song');
+const songTextEl = document.getElementById('song-text');
 const albumArtEl = document.getElementById('album-art');
 const artistEl = document.getElementById('artist');
 const trackEl = document.getElementById('track');
 
 if (bgColor) {
   songEl.style.backgroundColor = bgColor;
+}
+
+if (!isNaN(customWidth) && customWidth > 0) {
+  songTextEl.style.width = customWidth + 'px';
+  // The default max-width on #song is sized for the default 450px text
+  // area; a custom width can legitimately need more (or less) room, so
+  // let #song size itself to its content instead of being capped.
+  songEl.style.maxWidth = 'none';
 }
 
 let hideTimer = null;
@@ -50,10 +60,6 @@ function showError(message) {
   clearTimeout(hideTimer);
 }
 
-// Pixels per second the text should travel at, regardless of how long
-// the string is. Keeping speed constant (instead of duration constant)
-// means a long artist list gets proportionally more time to scroll by
-// instead of being crammed into the same fixed window as a short one.
 const SCROLL_SPEED_PX_PER_SEC = 60;
 const SCROLL_MIN_DURATION = 8; // seconds, floor for short overflow text
 const SCROLL_PAUSE_FRACTION = 0.4; // fraction of the cycle spent paused (start+end holds)

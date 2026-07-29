@@ -13,6 +13,9 @@ const enableFadeCheckbox = document.getElementById('enable-fade');
 const bgColorOption = document.getElementById('bg-color-option');
 const enableBgColorCheckbox = document.getElementById('enable-bg-color');
 const bgColorPicker = document.getElementById('bg-color-picker');
+// text area width option
+const widthOption = document.getElementById('width-option');
+const textWidthInput = document.getElementById('text-width');
 
 const params = new URLSearchParams(window.location.search);
 const code = params.get('code');
@@ -64,6 +67,11 @@ async function exchangeCodeForToken(code) {
       urlParams.bg_color = bgColorPicker.value;
     }
 
+    const widthValue = parseInt(textWidthInput.value, 10);
+    if (!isNaN(widthValue) && widthValue !== 450) {
+      urlParams.width = widthValue;
+    }
+
     overlayUrl = OVERLAY_URL + '?' + new URLSearchParams(urlParams).toString();
   }
 
@@ -72,6 +80,7 @@ async function exchangeCodeForToken(code) {
   albumArtOption.style.display = 'block';
   fadeOption.style.display = 'block';
   bgColorOption.style.display = 'block';
+  widthOption.style.display = 'block';
 
   showAlbumArtCheckbox.addEventListener('change', () => {
     updateOverlayUrl();
@@ -87,6 +96,10 @@ async function exchangeCodeForToken(code) {
   });
 
   bgColorPicker.addEventListener('input', () => {
+    updateOverlayUrl();
+  });
+
+  textWidthInput.addEventListener('input', () => {
     updateOverlayUrl();
   });
 
