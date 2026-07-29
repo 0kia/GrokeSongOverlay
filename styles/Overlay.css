@@ -50,8 +50,7 @@ html, body {
   font-size: 2.25rem;
   font-weight: 500;
   color: white;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.03em;
 }
 
 #track {
