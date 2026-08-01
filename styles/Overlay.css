@@ -62,7 +62,7 @@ html, body {
 /* Scrolling text */
 #artist.scrolling,
 #track.scrolling {
-  animation: scroll-text 8s linear infinite;
+  animation: scroll-text 8s linear infinite alternate;
 }
 
 @keyframes scroll-text {
