@@ -13,6 +13,9 @@ const enableBgColorCheckbox = document.getElementById('enable-bg-color');
 const bgColorPicker = document.getElementById('bg-color-picker');
 // text area width option
 const textWidthInput = document.getElementById('text-width');
+// capitalize options
+const capsArtistCheckbox = document.getElementById('caps-artist');
+const capsTrackCheckbox = document.getElementById('caps-track');
 
 const params = new URLSearchParams(window.location.search);
 const code = params.get('code');
@@ -69,6 +72,14 @@ async function exchangeCodeForToken(code) {
       urlParams.width = widthValue;
     }
 
+    if (capsArtistCheckbox.checked) {
+      urlParams.caps_artist = true;
+    }
+
+    if (capsTrackCheckbox.checked) {
+      urlParams.caps_track = true;
+    }
+
     overlayUrl = OVERLAY_URL + '?' + new URLSearchParams(urlParams).toString();
   }
 
@@ -94,6 +105,14 @@ async function exchangeCodeForToken(code) {
   });
 
   textWidthInput.addEventListener('input', () => {
+    updateOverlayUrl();
+  });
+
+  capsArtistCheckbox.addEventListener('change', () => {
+    updateOverlayUrl();
+  });
+
+  capsTrackCheckbox.addEventListener('change', () => {
     updateOverlayUrl();
   });
 

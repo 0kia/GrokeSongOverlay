@@ -28,10 +28,17 @@ h1 {
   font-weight: 600;
 }
 
-.options-panel {
+.options-columns {
   display: none;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.options-panel {
+  display: flex;
   flex-direction: column;
-  width: 320px;
+  width: 280px;
   background: #1e1e1e;
   border: 2px solid #333;
   border-radius: 10px;
