@@ -7,28 +7,34 @@
     </head>
 
     <body>
-        <h1>okia's Overlay</h1>
+        <h1>Your Overlay Link</h1>
 
         <div class="center">
             <p id="status">Logging in...</p>
 
-            <label id="album-art-option" style="display: none;">
-                <input type="checkbox" id="show-album-art" checked>
-                Show album art
-            </label>
-            <label id="fade-option" style="display: none;">
-                <input type="checkbox" id="enable-fade">
-                Only Show on Song Change
-            </label>
-            <label id="bg-color-option" style="display: none;">
-                <input type="checkbox" id="enable-bg-color">
-                Background color (Default is Spotify's)
-                <input type="color" id="bg-color-picker" value="#121212" disabled>
-            </label>
-            <label id="width-option" style="display: none;">
-                Max Width
-                <input type="number" id="text-width" value="400" min="100" max="750" step="10">
-            </label>
+            <div id="options-panel" class="options-panel" style="display: none;">
+                <h2 class="options-title">Options</h2>
+
+                <label id="album-art-option" class="option-row">
+                    <span>Show album art</span>
+                    <input type="checkbox" id="show-album-art" checked>
+                </label>
+                <label id="fade-option" class="option-row">
+                    <span>Only on song change</span>
+                    <input type="checkbox" id="enable-fade" checked>
+                </label>
+                <label id="bg-color-option" class="option-row">
+                    <span>Background color</span>
+                    <span class="option-controls">
+                        <input type="checkbox" id="enable-bg-color">
+                        <input type="color" id="bg-color-picker" value="#121212" disabled>
+                    </span>
+                </label>
+                <label id="width-option" class="option-row">
+                    <span>Text area width (px)</span>
+                    <input type="number" id="text-width" value="450" min="100" max="2000" step="10">
+                </label>
+            </div>
         </div>
 
         <script src="../scripts/callback.js"></script>

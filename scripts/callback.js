@@ -3,18 +3,15 @@ const REDIRECT_URI = 'https://0kia.github.io/OkiaOverlay/pages/callback.html';
 const OVERLAY_URL = 'https://0kia.github.io/OkiaOverlay/pages/overlay.html';
 
 const statusEl = document.getElementById('status');
+const optionsPanel = document.getElementById('options-panel');
 // display album art option
-const albumArtOption = document.getElementById('album-art-option');
 const showAlbumArtCheckbox = document.getElementById('show-album-art');
 // fade out enable option
-const fadeOption = document.getElementById('fade-option');
 const enableFadeCheckbox = document.getElementById('enable-fade');
 // background color option
-const bgColorOption = document.getElementById('bg-color-option');
 const enableBgColorCheckbox = document.getElementById('enable-bg-color');
 const bgColorPicker = document.getElementById('bg-color-picker');
 // text area width option
-const widthOption = document.getElementById('width-option');
 const textWidthInput = document.getElementById('text-width');
 
 const params = new URLSearchParams(window.location.search);
@@ -68,7 +65,7 @@ async function exchangeCodeForToken(code) {
     }
 
     const widthValue = parseInt(textWidthInput.value, 10);
-    if (!isNaN(widthValue) && widthValue !== 400) {
+    if (!isNaN(widthValue) && widthValue !== 450) {
       urlParams.width = widthValue;
     }
 
@@ -77,10 +74,7 @@ async function exchangeCodeForToken(code) {
 
   updateOverlayUrl();
 
-  albumArtOption.style.display = 'block';
-  fadeOption.style.display = 'block';
-  bgColorOption.style.display = 'block';
-  widthOption.style.display = 'block';
+  optionsPanel.style.display = 'flex';
 
   showAlbumArtCheckbox.addEventListener('change', () => {
     updateOverlayUrl();
