@@ -38,11 +38,6 @@ let currentTrackId = null;
 let accessToken = null;
 let accessTokenExpires = 0;
 
-console.log('CLIENT_ID:', CLIENT_ID);
-console.log('Has refresh token:', !!refreshToken);
-console.log('Refresh token length:', refreshToken?.length);
-console.log('Show album art:', showAlbumArt);
-
 function showThenFade() {
   songEl.classList.add('is-visible');
   clearTimeout(hideTimer);
@@ -74,21 +69,11 @@ function setupScrolling(element) {
   resetScrolling(element);
 
   requestAnimationFrame(() => {
-
     if (element.scrollWidth > element.clientWidth) {
       const distance = element.scrollWidth - element.clientWidth;
 
-      console.log('OVERFLOW DETECTED');
-      console.log('Scroll distance:', distance);
-
-      element.style.setProperty(
-        '--scroll-distance',
-        `-${distance}px`
-      );
-
+      element.style.setProperty('--scroll-distance', `-${distance}px`);
       element.classList.add('scrolling');
-    } else {
-      console.log('NO OVERFLOW');
     }
   });
 }
@@ -113,8 +98,7 @@ async function refreshAccessToken() {
   });
 
   if (!res.ok) {
-    console.log('Refresh token request failed:', res.status);
-    console.log('Response:', await res.text());
+    console.error('Refresh token request failed:', res.status);
     return null;
   }
 
@@ -122,8 +106,6 @@ async function refreshAccessToken() {
 
   accessToken = data.access_token;
   accessTokenExpires = Date.now() + data.expires_in * 1000;
-
-  console.log('Access token refreshed successfully.');
 
   return accessToken;
 }

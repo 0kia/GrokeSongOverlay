@@ -2,17 +2,23 @@ const CLIENT_ID = localStorage.getItem('spotify_client_id');
 const REDIRECT_URI = 'https://0kia.github.io/OkiaOverlay/pages/callback.html';
 const OVERLAY_URL = 'https://0kia.github.io/OkiaOverlay/pages/overlay.html';
 
+//containers
 const statusEl = document.getElementById('status');
 const optionsPanel = document.getElementById('options-panel');
+
 // display album art option
 const showAlbumArtCheckbox = document.getElementById('show-album-art');
+
 // fade out enable option
 const enableFadeCheckbox = document.getElementById('enable-fade');
+
 // background color option
 const enableBgColorCheckbox = document.getElementById('enable-bg-color');
 const bgColorPicker = document.getElementById('bg-color-picker');
+
 // text area width option
 const textWidthInput = document.getElementById('text-width');
+
 // capitalize options
 const capsArtistCheckbox = document.getElementById('caps-artist');
 const capsTrackCheckbox = document.getElementById('caps-track');
@@ -31,7 +37,7 @@ async function exchangeCodeForToken(code) {
     return;
   }
 
-  const params = new URLSearchParams({
+  const tokenParams = new URLSearchParams({
     client_id: CLIENT_ID,
     grant_type: 'authorization_code',
     code,
@@ -44,7 +50,7 @@ async function exchangeCodeForToken(code) {
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded'
     },
-    body: params.toString()
+    body: tokenParams.toString()
   });
 
   if (!res.ok) {
@@ -85,34 +91,18 @@ async function exchangeCodeForToken(code) {
 
   updateOverlayUrl();
 
-  optionsPanel.style.display = 'flex';
+  optionsPanel.classList.remove('hidden');
 
-  showAlbumArtCheckbox.addEventListener('change', () => {
-    updateOverlayUrl();
-  });
+  // Every option just needs to regenerate the link on change/input, except
+  // the bg-color checkbox which also enables/disables the color picker.
+  [showAlbumArtCheckbox, enableFadeCheckbox, capsArtistCheckbox, capsTrackCheckbox]
+    .forEach(el => el.addEventListener('change', updateOverlayUrl));
 
-  enableFadeCheckbox.addEventListener('change', () => {
-    updateOverlayUrl();
-  });
+  bgColorPicker.addEventListener('input', updateOverlayUrl);
+  textWidthInput.addEventListener('input', updateOverlayUrl);
 
   enableBgColorCheckbox.addEventListener('change', () => {
     bgColorPicker.disabled = !enableBgColorCheckbox.checked;
-    updateOverlayUrl();
-  });
-
-  bgColorPicker.addEventListener('input', () => {
-    updateOverlayUrl();
-  });
-
-  textWidthInput.addEventListener('input', () => {
-    updateOverlayUrl();
-  });
-
-  capsArtistCheckbox.addEventListener('change', () => {
-    updateOverlayUrl();
-  });
-
-  capsTrackCheckbox.addEventListener('change', () => {
     updateOverlayUrl();
   });
 
