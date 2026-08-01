@@ -74,7 +74,7 @@ async function exchangeCodeForToken(code) {
     }
 
     const widthValue = parseInt(textWidthInput.value, 10);
-    if (!isNaN(widthValue) && widthValue !== 450) {
+    if (!isNaN(widthValue) && widthValue !== 400) {
       urlParams.width = widthValue;
     }
 
