@@ -10,6 +10,8 @@ const capsTrack = params.get('caps_track') === 'true';
 
 const POLL_INTERVAL = 10000;
 const VISIBLE_DURATION = 7000;
+const NO_SONG_ID = '__no_song__'; // sentinel currentTrackId used for the empty state, distinct from any real Spotify track id and from the initial null
+const NO_SONG_TEXT = 'No song playing';
 
 const songEl = document.getElementById('song');
 const songTextEl = document.getElementById('song-text');
@@ -23,7 +25,7 @@ if (bgColor) {
 
 if (!isNaN(customWidth) && customWidth > 0) {
   songTextEl.style.width = customWidth + 'px';
-  // The default max-width on #song is sized for the default 450px text
+  // The default max-width on #song is sized for the default 400px text
   // area; a custom width can legitimately need more (or less) room, so
   // let #song size itself to its content instead of being capped.
   songEl.style.maxWidth = 'none';
@@ -58,6 +60,23 @@ function showError(message) {
 
   songEl.classList.add('is-visible');
   clearTimeout(hideTimer);
+}
+
+function showNoSongPlaying() {
+  if (currentTrackId === NO_SONG_ID) {
+    return; // already showing this state, don't restart the fade timer every poll
+  }
+
+  currentTrackId = NO_SONG_ID;
+
+  artistEl.textContent = '';
+  trackEl.textContent = NO_SONG_TEXT;
+  albumArtEl.style.display = 'none';
+
+  setupScrolling(artistEl);
+  setupScrolling(trackEl);
+
+  showThenFade();
 }
 
 function resetScrolling(element) {
@@ -137,6 +156,7 @@ async function updateSong() {
     );
 
     if (res.status === 204) {
+      showNoSongPlaying();
       return;
     }
 
@@ -148,6 +168,7 @@ async function updateSong() {
     const data = await res.json();
 
     if (!data || !data.item) {
+      showNoSongPlaying();
       return;
     }
 
