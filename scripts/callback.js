@@ -2,23 +2,19 @@ const CLIENT_ID = localStorage.getItem('spotify_client_id');
 const REDIRECT_URI = 'https://0kia.github.io/OkiaOverlay/pages/callback.html';
 const OVERLAY_URL = 'https://0kia.github.io/OkiaOverlay/pages/overlay.html';
 
-//containers
 const statusEl = document.getElementById('status');
 const optionsPanel = document.getElementById('options-panel');
-
 // display album art option
 const showAlbumArtCheckbox = document.getElementById('show-album-art');
-
 // fade out enable option
 const enableFadeCheckbox = document.getElementById('enable-fade');
-
+// transition style option
+const transitionStyleSelect = document.getElementById('transition-style');
 // background color option
 const enableBgColorCheckbox = document.getElementById('enable-bg-color');
 const bgColorPicker = document.getElementById('bg-color-picker');
-
 // text area width option
 const textWidthInput = document.getElementById('text-width');
-
 // capitalize options
 const capsArtistCheckbox = document.getElementById('caps-artist');
 const capsTrackCheckbox = document.getElementById('caps-track');
@@ -86,6 +82,10 @@ async function exchangeCodeForToken(code) {
       urlParams.caps_track = true;
     }
 
+    if (transitionStyleSelect.value !== 'fade') {
+      urlParams.transition = transitionStyleSelect.value;
+    }
+
     overlayUrl = OVERLAY_URL + '?' + new URLSearchParams(urlParams).toString();
   }
 
@@ -95,7 +95,7 @@ async function exchangeCodeForToken(code) {
 
   // Every option just needs to regenerate the link on change/input, except
   // the bg-color checkbox which also enables/disables the color picker.
-  [showAlbumArtCheckbox, enableFadeCheckbox, capsArtistCheckbox, capsTrackCheckbox]
+  [showAlbumArtCheckbox, enableFadeCheckbox, capsArtistCheckbox, capsTrackCheckbox, transitionStyleSelect]
     .forEach(el => el.addEventListener('change', updateOverlayUrl));
 
   bgColorPicker.addEventListener('input', updateOverlayUrl);

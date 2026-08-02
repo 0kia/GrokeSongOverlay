@@ -15,11 +15,29 @@ html, body {
   border-radius: 10px;
   background-color: transparent; /* overridden inline via ?bg_color= */
   opacity: 0;
+}
+
+#song.transition-fade {
   transition: opacity 0.6s ease;
+}
+
+#song.transition-bounce {
+  transform: translateY(24px);
+  /* "back" easing overshoots slightly past the resting position before
+     settling, which reads as a little bounce on both the way in and out. */
+  transition: opacity 0.5s ease, transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+#song.transition-none {
+  transition: none;
 }
 
 #song.is-visible {
   opacity: 1;
+}
+
+#song.transition-bounce.is-visible {
+  transform: translateY(0);
 }
 
 #album-art {
@@ -44,6 +62,11 @@ html, body {
 #track {
   width: 100%;
   white-space: nowrap;
+  /* No overflow/clipping here on purpose — #song-text (the parent) is the
+     fixed-width masking window with overflow: hidden. If this element also
+     clips itself, the browser truncates the text at render time, before the
+     scroll transform ever runs, so anything past the first ~450px is
+     discarded and can never be scrolled into view. */
 }
 
 #artist {
