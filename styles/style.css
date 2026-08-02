@@ -10,8 +10,9 @@ h1 {
   background-color: #000000;
   text-align: center;
   margin-top: 0px;
-  font-family: 'Courier New', Courier, monospace;
-  font-size: 64px;
+  font-family: sans-serif;
+  font-size: 72px;
+  padding: 14px;
 }
 
 .center {
