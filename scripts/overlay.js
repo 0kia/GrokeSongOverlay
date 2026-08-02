@@ -2,7 +2,7 @@ const params = new URLSearchParams(window.location.search);
 const refreshToken = params.get('refresh_token');
 const CLIENT_ID = params.get('client_id');
 const showAlbumArt = params.get('album_art') !== 'false';
-const enableFade = params.get('fade') !== 'false';
+const enableAutohide = params.get('autohide') !== 'false';
 const bgColor = params.get('bg_color'); // e.g. ?bg_color=%23121212 or ?bg_color=rgba(0,0,0,0.5)
 const customWidth = parseInt(params.get('width'), 10); // e.g. ?width=600 — width in px of the artist/title text area
 const capsArtist = params.get('caps_artist') === 'true';
@@ -29,6 +29,9 @@ if (bgColor) {
 
 if (!isNaN(customWidth) && customWidth > 0) {
   songTextEl.style.width = customWidth + 'px';
+  // The default max-width on #song is sized for the default 400px text
+  // area; a custom width can legitimately need more (or less) room, so
+  // let #song size itself to its content instead of being capped.
   songEl.style.maxWidth = 'none';
 }
 
@@ -46,7 +49,7 @@ function showThenFade() {
   songEl.classList.add('is-visible');
   clearTimeout(hideTimer);
 
-  if (!enableFade) {
+  if (!enableAutohide) {
     return;
   }
 

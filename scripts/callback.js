@@ -6,8 +6,8 @@ const statusEl = document.getElementById('status');
 const optionsPanel = document.getElementById('options-panel');
 // display album art option
 const showAlbumArtCheckbox = document.getElementById('show-album-art');
-// fade out enable option
-const enableFadeCheckbox = document.getElementById('enable-fade');
+// auto-hide option
+const enableAutohideCheckbox = document.getElementById('enable-autohide');
 // transition style option
 const transitionStyleSelect = document.getElementById('transition-style');
 // background color option
@@ -62,7 +62,7 @@ async function exchangeCodeForToken(code) {
       refresh_token: data.refresh_token,
       client_id: CLIENT_ID,
       album_art: showAlbumArtCheckbox.checked,
-      fade: enableFadeCheckbox.checked
+      autohide: enableAutohideCheckbox.checked
     };
 
     if (enableBgColorCheckbox.checked) {
@@ -93,10 +93,18 @@ async function exchangeCodeForToken(code) {
 
   optionsPanel.classList.remove('hidden');
 
+  function syncTransitionAvailability() {
+    transitionStyleSelect.disabled = !enableAutohideCheckbox.checked;
+  }
+
+  syncTransitionAvailability();
+
   // Every option just needs to regenerate the link on change/input, except
   // the bg-color checkbox which also enables/disables the color picker.
-  [showAlbumArtCheckbox, enableFadeCheckbox, capsArtistCheckbox, capsTrackCheckbox, transitionStyleSelect]
+  [showAlbumArtCheckbox, enableAutohideCheckbox, capsArtistCheckbox, capsTrackCheckbox, transitionStyleSelect]
     .forEach(el => el.addEventListener('change', updateOverlayUrl));
+
+  enableAutohideCheckbox.addEventListener('change', syncTransitionAvailability);
 
   bgColorPicker.addEventListener('input', updateOverlayUrl);
   textWidthInput.addEventListener('input', updateOverlayUrl);
