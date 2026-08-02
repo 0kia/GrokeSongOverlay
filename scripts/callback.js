@@ -10,6 +10,7 @@ const showAlbumArtCheckbox = document.getElementById('show-album-art');
 const enableAutohideCheckbox = document.getElementById('enable-autohide');
 // transition style option
 const transitionStyleSelect = document.getElementById('transition-style');
+const transitionOption = document.getElementById('transition-option');
 // background color option
 const enableBgColorCheckbox = document.getElementById('enable-bg-color');
 const bgColorPicker = document.getElementById('bg-color-picker');
@@ -94,7 +95,7 @@ async function exchangeCodeForToken(code) {
   optionsPanel.classList.remove('hidden');
 
   function syncTransitionAvailability() {
-    transitionStyleSelect.disabled = !enableAutohideCheckbox.checked;
+    transitionOption.classList.toggle('hidden', !enableAutohideCheckbox.checked);
   }
 
   syncTransitionAvailability();
