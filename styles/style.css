@@ -85,7 +85,7 @@ h1 {
 .option-row input[type="number"],
 .option-row select {
   width: 80px;
-  padding: 6px 8px;
+  padding: 6px;
   color: white;
   background: #121212;
   border: 1px solid #333;
