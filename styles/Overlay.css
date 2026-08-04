@@ -58,6 +58,14 @@ html, body {
   overflow: hidden;
 }
 
+.song-flipped #artist {
+  order: 2;
+}
+
+.song-flipped #track {
+  order: 1;
+}
+
 #artist,
 #track {
   width: 100%;
@@ -101,3 +109,4 @@ html, body {
     transform: translateX(var(--scroll-distance));
   }
 }
+

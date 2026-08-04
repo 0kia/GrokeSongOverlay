@@ -19,6 +19,8 @@ const textWidthInput = document.getElementById('text-width');
 // capitalize options
 const capsArtistCheckbox = document.getElementById('caps-artist');
 const capsTrackCheckbox = document.getElementById('caps-track');
+// flip order option
+const flipOrderCheckbox = document.getElementById('flip-order');
 
 const params = new URLSearchParams(window.location.search);
 const code = params.get('code');
@@ -87,6 +89,10 @@ async function exchangeCodeForToken(code) {
       urlParams.transition = transitionStyleSelect.value;
     }
 
+    if (flipOrderCheckbox.checked) {
+      urlParams.flip = true;
+    }
+
     overlayUrl = OVERLAY_URL + '?' + new URLSearchParams(urlParams).toString();
   }
 
@@ -102,7 +108,7 @@ async function exchangeCodeForToken(code) {
 
   // Every option just needs to regenerate the link on change/input, except
   // the bg-color checkbox which also enables/disables the color picker.
-  [showAlbumArtCheckbox, enableAutohideCheckbox, capsArtistCheckbox, capsTrackCheckbox, transitionStyleSelect]
+  [showAlbumArtCheckbox, enableAutohideCheckbox, capsArtistCheckbox, capsTrackCheckbox, flipOrderCheckbox, transitionStyleSelect]
     .forEach(el => el.addEventListener('change', updateOverlayUrl));
 
   enableAutohideCheckbox.addEventListener('change', syncTransitionAvailability);

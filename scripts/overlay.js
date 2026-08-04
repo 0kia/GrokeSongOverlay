@@ -7,6 +7,7 @@ const bgColor = params.get('bg_color'); // e.g. ?bg_color=%23121212 or ?bg_color
 const customWidth = parseInt(params.get('width'), 10); // e.g. ?width=600 — width in px of the artist/title text area
 const capsArtist = params.get('caps_artist') === 'true';
 const capsTrack = params.get('caps_track') === 'true';
+const flipOrder = params.get('flip') === 'true'; // ?flip=true swaps the vertical order of artist/track
 const validTransitions = ['none', 'fade', 'bounce'];
 const transitionStyle = validTransitions.includes(params.get('transition'))
   ? params.get('transition')
@@ -37,6 +38,7 @@ if (!isNaN(customWidth) && customWidth > 0) {
 
 artistEl.classList.toggle('caps-text', capsArtist);
 trackEl.classList.toggle('caps-text', capsTrack);
+songTextEl.classList.toggle('song-flipped', flipOrder);
 songEl.classList.add('transition-' + transitionStyle);
 
 let hideTimer = null;
